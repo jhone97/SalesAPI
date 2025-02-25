@@ -32,7 +32,7 @@ namespace SalesAPI.Hubs
             }
 
             // username not in db
-            var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.Name == username);
+            var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.Username == username);
 
             if (client == null)
             {
