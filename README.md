@@ -4,6 +4,5 @@ Just make inital push
 
 #To Do
 
-change to good naming 
-
-it's late 
+1- fix data migrations and relations
+2- add controller 
