@@ -11,7 +11,7 @@ using SalesAPI.DbContextes;
 
 namespace SalesAPI.Migrations
 {
-    [DbContext(typeof(ClientsContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250224222435_v2")]
     partial class v2
     {

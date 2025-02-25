@@ -14,12 +14,12 @@ namespace SalesAPI.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly ClientsContext _clientsContext;
+        private readonly ApplicationDbContext _clientsContext;
         private readonly IHubContext<ChatHub, IChatClient> _hubContext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtService _jwtService;
 
-        public ClientsController(ClientsContext companyContext, IHubContext<ChatHub, IChatClient> hubContext, UserManager<IdentityUser> userManager, JwtService jwtService)
+        public ClientsController(ApplicationDbContext companyContext, IHubContext<ChatHub, IChatClient> hubContext, UserManager<IdentityUser> userManager, JwtService jwtService)
         {
             _clientsContext = companyContext;
             _hubContext = hubContext;

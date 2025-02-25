@@ -17,7 +17,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-builder.Services.AddDbContext<ClientsContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DemoCompany")));
+builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DemoCompany")));
 builder.Services.AddScoped<JwtService>();
 builder.Services
     .AddIdentityCore<IdentityUser>(options => {
@@ -29,7 +29,7 @@ builder.Services
         options.Password.RequireUppercase = false;
         options.Password.RequireLowercase = false;
     })
-    .AddEntityFrameworkStores<ClientsContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
 

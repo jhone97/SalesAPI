@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SalesAPI.DbContextes
 {
-    public class ClientsContext : IdentityUserContext<IdentityUser>
+    public class ApplicationDbContext : IdentityUserContext<IdentityUser>
     {
-        public ClientsContext(DbContextOptions<ClientsContext> options) : base(options)
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Entities.Models.Item> Items { get; set; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
@@ -27,7 +29,7 @@ namespace SalesAPI.DbContextes
 
   
 
-        public DbSet<Client> Clients { get; set; }
+      
        
     }
 }

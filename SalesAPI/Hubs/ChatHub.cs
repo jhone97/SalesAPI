@@ -8,10 +8,10 @@ namespace SalesAPI.Hubs
 {
     public class ChatHub : Hub<IChatClient>
     {
-        private readonly ClientsContext _clientsContext;
+        private readonly ApplicationDbContext _clientsContext;
         private readonly ILogger<ChatHub> _logger;
 
-        public ChatHub(ClientsContext clientsContext, ILogger<ChatHub> logger)
+        public ChatHub(ApplicationDbContext clientsContext, ILogger<ChatHub> logger)
         {
             _clientsContext = clientsContext;
             _logger = logger;

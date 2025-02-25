@@ -10,7 +10,7 @@ using SalesAPI.DbContextes;
 
 namespace SalesAPI.Migrations
 {
-    [DbContext(typeof(ClientsContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class ClientsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
