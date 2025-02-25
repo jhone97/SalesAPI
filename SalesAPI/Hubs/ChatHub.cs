@@ -32,19 +32,19 @@ namespace SalesAPI.Hubs
             }
 
             // username not in db
-            var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.Username == username);
+            //var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.Username == username);
 
-            if (client == null)
-            {
-                _logger.LogError("Username {Username} not found in db. Disconnecting client.", username);
-                Context.Abort(); // Force disconnect if no username not in db
-                return;
-            }
+            //if (client == null)
+            //{
+            //    _logger.LogError("Username {Username} not found in db. Disconnecting client.", username);
+            //    Context.Abort(); // Force disconnect if no username not in db
+            //    return;
+            //}
 
-            _logger.LogInformation("Connected client: {Client}", JsonConvert.SerializeObject(client, Formatting.Indented));
-            client.SignalRConnectionId = Context.ConnectionId;
-            client.IsConnected = true;
-            _clientsContext.Clients.Update(client);
+           // _logger.LogInformation("Connected client: {Client}", JsonConvert.SerializeObject(client, Formatting.Indented));
+            //client.SignalRConnectionId = Context.ConnectionId;
+            //client.IsConnected = true;
+            //_clientsContext.Clients.Update(client);
             await _clientsContext.SaveChangesAsync();
            
             await base.OnConnectedAsync();
@@ -53,15 +53,15 @@ namespace SalesAPI.Hubs
         // on disconnect client
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.SignalRConnectionId == Context.ConnectionId);
-            if (client != null)
-            {
-                client.IsConnected = false;
-                _clientsContext.Clients.Update(client);
-                await _clientsContext.SaveChangesAsync();
-                _logger.LogInformation("Disconnected client: {Client}", JsonConvert.SerializeObject(client, Formatting.Indented));
-            }
-            await base.OnDisconnectedAsync(exception);
+            //var client = await _clientsContext.Clients.FirstOrDefaultAsync(x => x.SignalRConnectionId == Context.ConnectionId);
+            //if (client != null)
+            //{
+            //    client.IsConnected = false;
+            //    _clientsContext.Clients.Update(client);
+            //    await _clientsContext.SaveChangesAsync();
+            //    _logger.LogInformation("Disconnected client: {Client}", JsonConvert.SerializeObject(client, Formatting.Indented));
+            //}
+            //await base.OnDisconnectedAsync(exception);
         }
 
         public async Task SendMessage(PublicMessage message)

@@ -12,8 +12,8 @@ using SalesAPI.DbContextes;
 namespace SalesAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250224222435_v2")]
-    partial class v2
+    [Migration("20250225220419_Add_Manufacturer_one_to_many_items")]
+    partial class Add_Manufacturer_one_to_many_items
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace SalesAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.Client", b =>
+            modelBuilder.Entity("Entities.Models.Item", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,84 +33,36 @@ namespace SalesAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
+                    b.Property<string>("ItemCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
+                    b.Property<string>("ItemDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsConnected")
-                        .HasColumnType("bit");
+                    b.Property<int>("ManufacturerId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("SignalRConnectionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("ManufacturerId");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Entities.Models.Manufacturer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ManufacturerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyName = "Alkaalife",
-                            EmailAddress = "khaled@alkaalife.com",
-                            IsConnected = false,
-                            Password = "ughuwr@",
-                            SignalRConnectionId = "",
-                            Username = "Khaled"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyName = "Alkaalife",
-                            EmailAddress = "ali@alkaalife.com",
-                            IsConnected = false,
-                            Password = "lwergy4",
-                            SignalRConnectionId = "",
-                            Username = "Ali"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CompanyName = "Aljazerr",
-                            EmailAddress = "escandar@aljazerr.com",
-                            IsConnected = false,
-                            Password = "3432edf",
-                            SignalRConnectionId = "",
-                            Username = "Escandar"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CompanyName = "Jubali",
-                            EmailAddress = "zaki@jubali.com",
-                            IsConnected = false,
-                            Password = "23452rfwfd",
-                            SignalRConnectionId = "",
-                            Username = "Zaki"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CompanyName = "Jubali",
-                            EmailAddress = "naif@jubali.com",
-                            IsConnected = false,
-                            Password = "adadad4",
-                            SignalRConnectionId = "",
-                            Username = "Naif"
-                        });
+                    b.ToTable("Manufacturers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -244,6 +196,17 @@ namespace SalesAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Entities.Models.Item", b =>
+                {
+                    b.HasOne("Entities.Models.Manufacturer", "Manufacturer")
+                        .WithMany("Items")
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manufacturer");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
@@ -269,6 +232,11 @@ namespace SalesAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Manufacturer", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

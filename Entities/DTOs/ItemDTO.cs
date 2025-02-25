@@ -1,21 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Entities.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Entities.Models
+namespace Entities.DTOs
 {
-    [Table("Items")]
-    public class Item
+    public class ItemDTO : Item
     {
-        [Key]
-        public int Id { get; set; }
-        [Required (ErrorMessage = "item code can't be empty")]
+        [Required(ErrorMessage = "item code can't be empty")]
         public string ItemCode { get; set; }
         [Required(ErrorMessage = "item decription can't be empty")]
         public string ItemDescription { get; set; }
         public int ManufacturerId { get; set; }
         [Required(ErrorMessage = "manufacturere details can't be empty")]
         public Manufacturer Manufacturer { get; set; }
-
-
     }
 }

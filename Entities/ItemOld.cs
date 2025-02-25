@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities
 {
-    public class Item
+    public class ItemOld
     {
         [Key]
         public int Id { get; set; }

@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace SalesAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class Add_Manufacturer_one_to_many_items : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,21 +37,16 @@ namespace SalesAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "clients",
+                name: "Manufacturers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SignalRConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsConnected = table.Column<bool>(type: "bit", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ManufacturerName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_clients", x => x.Id);
+                    table.PrimaryKey("PK_Manufacturers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,16 +110,25 @@ namespace SalesAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "clients",
-                columns: new[] { "Id", "CompanyName", "EmailAddress", "IsConnected", "Password", "SignalRConnectionId", "Username" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
                 {
-                    { 1, "Alkaalife", "khaled@alkaalife.com", false, "ughuwr@", "", "Khaled" },
-                    { 2, "Alkaalife", "ali@alkaalife.com", false, "lwergy4", "", "Ali" },
-                    { 3, "Aljazerr", "escandar@aljazerr.com", false, "3432edf", "", "Escandar" },
-                    { 4, "Jubali", "zaki@jubali.com", false, "23452rfwfd", "", "Zaki" },
-                    { 5, "Jubali", "naif@jubali.com", false, "adadad4", "", "Naif" }
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ItemDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ManufacturerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Items_Manufacturers_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "Manufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -150,6 +152,11 @@ namespace SalesAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_ManufacturerId",
+                table: "Items",
+                column: "ManufacturerId");
         }
 
         /// <inheritdoc />
@@ -165,10 +172,13 @@ namespace SalesAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "clients");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Manufacturers");
         }
     }
 }
