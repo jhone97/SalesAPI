@@ -13,9 +13,8 @@ namespace Entities.Models
         public string? Email { get; set; }
         public string? Password { get; set; }
 
-        // Foreign Key for Company
-        public int? CompanyId { get; set; }
-        public Company? Company { get; set; }
+      
+     
 
 
     }

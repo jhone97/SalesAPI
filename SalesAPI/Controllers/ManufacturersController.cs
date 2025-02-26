@@ -27,19 +27,6 @@ namespace SalesAPI.Controllers
             return Ok(results);
         }
 
-        [HttpPost]
-        [Route("/AddManufacturer")]
-        public async Task<IActionResult> AddManufacturer(Manufacturer manufacturer)
-        {
-            manufacturer.Id = 0;
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _applicationDb.Manufacturers.Add(manufacturer);
-            await _applicationDb.SaveChangesAsync();
-            return Ok(manufacturer);
-        }
 
        
     }

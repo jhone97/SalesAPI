@@ -12,8 +12,8 @@ using SalesAPI.DbContextes;
 namespace SalesAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250226025502_Init")]
-    partial class Init
+    [Migration("20250226103853_Data-Seed")]
+    partial class DataSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,6 @@ namespace SalesAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Entities.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Companies");
-                });
 
             modelBuilder.Entity("Entities.Models.Item", b =>
                 {
@@ -67,16 +51,22 @@ namespace SalesAPI.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StockId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ManufacturerId");
 
-                    b.HasIndex("StockId");
-
                     b.ToTable("Items");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ItemCode = "12626222",
+                            ItemDescription = "Engine belt",
+                            ManufacturerId = 2,
+                            Price = 0.0,
+                            Quantity = 0
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Manufacturer", b =>
@@ -93,55 +83,18 @@ namespace SalesAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers");
-                });
 
-            modelBuilder.Entity("Entities.Models.Stock", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Stocks");
-                });
-
-            modelBuilder.Entity("Entities.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("users");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ManufacturerName = "Ford"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ManufacturerName = "GM"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -278,34 +231,10 @@ namespace SalesAPI.Migrations
             modelBuilder.Entity("Entities.Models.Item", b =>
                 {
                     b.HasOne("Entities.Models.Manufacturer", "Manufacturer")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ManufacturerId");
 
-                    b.HasOne("Entities.Models.Stock", "Stock")
-                        .WithMany("Items")
-                        .HasForeignKey("StockId");
-
                     b.Navigation("Manufacturer");
-
-                    b.Navigation("Stock");
-                });
-
-            modelBuilder.Entity("Entities.Models.Stock", b =>
-                {
-                    b.HasOne("Entities.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Entities.Models.User", b =>
-                {
-                    b.HasOne("Entities.Models.Company", "Company")
-                        .WithMany("Users")
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -335,12 +264,7 @@ namespace SalesAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Entities.Models.Company", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Entities.Models.Stock", b =>
+            modelBuilder.Entity("Entities.Models.Manufacturer", b =>
                 {
                     b.Navigation("Items");
                 });

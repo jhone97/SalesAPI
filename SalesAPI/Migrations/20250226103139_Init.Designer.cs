@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesAPI.DbContextes;
 
@@ -11,9 +12,11 @@ using SalesAPI.DbContextes;
 namespace SalesAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226103139_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,17 +56,6 @@ namespace SalesAPI.Migrations
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("Items");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ItemCode = "12626222",
-                            ItemDescription = "Engine belt",
-                            ManufacturerId = 2,
-                            Price = 0.0,
-                            Quantity = 0
-                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Manufacturer", b =>
@@ -80,18 +72,6 @@ namespace SalesAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ManufacturerName = "Ford"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ManufacturerName = "GM"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
