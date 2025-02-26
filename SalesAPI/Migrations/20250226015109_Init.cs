@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SalesAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_Manufacturer_one_to_many_items : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -116,9 +118,10 @@ namespace SalesAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: false)
+                    ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,8 +130,27 @@ namespace SalesAPI.Migrations
                         name: "FK_Items_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "Manufacturers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Items",
+                columns: new[] { "Id", "ItemCode", "ItemDescription", "ItemName", "ManufacturerId" },
+                values: new object[,]
+                {
+                    { 1, "I001", "Item1 Description", "Item1", null },
+                    { 2, "I002", "Item2 Description", "Item2", null },
+                    { 3, "I003", "Item3 Description", "Item3", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Manufacturers",
+                columns: new[] { "Id", "ManufacturerName" },
+                values: new object[,]
+                {
+                    { 1, "Ford" },
+                    { 2, "GM" },
+                    { 3, "Nissan" }
                 });
 
             migrationBuilder.CreateIndex(

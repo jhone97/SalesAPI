@@ -1,4 +1,5 @@
-﻿using Entities.DTOs;
+﻿
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,27 @@ namespace SalesAPI.Controllers
         }
 
         [HttpGet("/GetAll")]
-        public async Task<IActionResult> GetAllItems()
+        public async Task<ActionResult<List<Item>>> GetAllItems()
         {
-            var results = await _applicationDb.items.ToListAsync();
+            var results = await _applicationDb.Items.
+                Include(m => m.Manufacturer).ToListAsync();
             return Ok(results);
+        }
+
+
+
+        [HttpGet("/GetItemByCode")]
+        public async Task<IActionResult> GetByCode(string itemCode)
+        {
+            return Ok();
+        }
+
+
+
+        [HttpPost("/AddItem")]
+        public async Task<IActionResult> AddItem(Item item)
+        {
+           return Ok();
         }
 
         

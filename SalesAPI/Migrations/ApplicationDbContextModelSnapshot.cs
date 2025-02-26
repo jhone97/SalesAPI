@@ -31,14 +31,15 @@ namespace SalesAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ItemCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ItemDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManufacturerId")
+                    b.Property<string>("ItemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ManufacturerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -46,6 +47,29 @@ namespace SalesAPI.Migrations
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("Items");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ItemCode = "I001",
+                            ItemDescription = "Item1 Description",
+                            ItemName = "Item1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ItemCode = "I002",
+                            ItemDescription = "Item2 Description",
+                            ItemName = "Item2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ItemCode = "I003",
+                            ItemDescription = "Item3 Description",
+                            ItemName = "Item3"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Manufacturer", b =>
@@ -57,12 +81,28 @@ namespace SalesAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ManufacturerName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ManufacturerName = "Ford"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ManufacturerName = "GM"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ManufacturerName = "Nissan"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -199,10 +239,8 @@ namespace SalesAPI.Migrations
             modelBuilder.Entity("Entities.Models.Item", b =>
                 {
                     b.HasOne("Entities.Models.Manufacturer", "Manufacturer")
-                        .WithMany("Items")
-                        .HasForeignKey("ManufacturerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId");
 
                     b.Navigation("Manufacturer");
                 });
@@ -232,11 +270,6 @@ namespace SalesAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Entities.Models.Manufacturer", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

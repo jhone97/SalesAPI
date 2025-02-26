@@ -1,7 +1,8 @@
-﻿using Entities.DTOs;
+﻿
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SalesAPI.DbContextes;
 
 namespace SalesAPI.Controllers
@@ -17,6 +18,15 @@ namespace SalesAPI.Controllers
             _applicationDb = applicationDb;
         }
 
+
+        [HttpGet]
+        [Route("/GetAllManufacturers")]
+        public async Task<ActionResult<List<Manufacturer>>> GetAll()
+        {
+            var results = await _applicationDb.Manufacturers.ToListAsync();
+            return Ok(results);
+        }
+
         [HttpPost]
         [Route("/AddManufacturer")]
         public async Task<IActionResult> AddManufacturer(Manufacturer manufacturer)
@@ -28,7 +38,9 @@ namespace SalesAPI.Controllers
             }
             _applicationDb.Manufacturers.Add(manufacturer);
             await _applicationDb.SaveChangesAsync();
-            return CreatedAtAction("GetManufacturer", new { id = manufacturer.Id }, manufacturer);
+            return Ok(manufacturer);
         }
+
+       
     }
 }
