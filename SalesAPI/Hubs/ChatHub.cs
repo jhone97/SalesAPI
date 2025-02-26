@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Old;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

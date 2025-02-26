@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities
+namespace Entities.Old
 {
     public class PublicMessage
     {

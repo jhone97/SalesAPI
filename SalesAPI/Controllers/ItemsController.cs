@@ -28,18 +28,13 @@ namespace SalesAPI.Controllers
 
 
 
-        [HttpGet("/GetItemByCode")]
-        public async Task<IActionResult> GetByCode(string itemCode)
-        {
-            return Ok();
-        }
-
-
 
         [HttpPost("/AddItem")]
         public async Task<IActionResult> AddItem(Item item)
         {
-           return Ok();
+           var result = await _applicationDb.Items.AddAsync(item);
+            await _applicationDb.SaveChangesAsync();
+            return Ok(result.Entity);
         }
 
         

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace SalesAPI.Migrations
 {
     /// <inheritdoc />
@@ -36,6 +34,19 @@ namespace SalesAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +124,46 @@ namespace SalesAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_users_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
@@ -121,7 +172,10 @@ namespace SalesAPI.Migrations
                     ItemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: true)
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerId = table.Column<int>(type: "int", nullable: true),
+                    StockId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,26 +185,11 @@ namespace SalesAPI.Migrations
                         column: x => x.ManufacturerId,
                         principalTable: "Manufacturers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "ItemCode", "ItemDescription", "ItemName", "ManufacturerId" },
-                values: new object[,]
-                {
-                    { 1, "I001", "Item1 Description", "Item1", null },
-                    { 2, "I002", "Item2 Description", "Item2", null },
-                    { 3, "I003", "Item3 Description", "Item3", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Manufacturers",
-                columns: new[] { "Id", "ManufacturerName" },
-                values: new object[,]
-                {
-                    { 1, "Ford" },
-                    { 2, "GM" },
-                    { 3, "Nissan" }
+                    table.ForeignKey(
+                        name: "FK_Items_Stocks_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stocks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -179,6 +218,21 @@ namespace SalesAPI.Migrations
                 name: "IX_Items_ManufacturerId",
                 table: "Items",
                 column: "ManufacturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_StockId",
+                table: "Items",
+                column: "StockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_CompanyId",
+                table: "Stocks",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_CompanyId",
+                table: "users",
+                column: "CompanyId");
         }
 
         /// <inheritdoc />
@@ -197,10 +251,19 @@ namespace SalesAPI.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
+                name: "users");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");
+
+            migrationBuilder.DropTable(
+                name: "Stocks");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
         }
     }
 }
