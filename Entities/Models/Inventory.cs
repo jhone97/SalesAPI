@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class User
+    public class Inventory
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-
-
         [JsonIgnore]
-        public Company Copmany { get; set; }
-
-
+        public Company Company { get; set; }
+        [JsonIgnore]
+        public List<Item> Items { get; set; }
     }
 }
