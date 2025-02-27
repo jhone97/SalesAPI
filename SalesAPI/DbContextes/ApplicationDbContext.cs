@@ -15,7 +15,7 @@ namespace SalesAPI.DbContextes
         public DbSet<Company> Companies { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Item> Items { get; set; }
-        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
